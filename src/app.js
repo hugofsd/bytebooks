@@ -1,6 +1,6 @@
 import express from "express";
 import conectaNaDataBase from "./config/dbConnect.js";
-import livro from "./model/Livros.js";
+import routes from "./routes/index.js";
 
 const conexao = await conectaNaDataBase();
 
@@ -14,41 +14,13 @@ conexao.once("open", () => {
 
 //----------------------
 const app = express();
+routes(app); // enviando a instancia do expreess
+
 // middleware. Utilizado para ter acesso as respostas e requisições etc.
 // vai servir para executar o express.jon para que todos os retornos do post
 // retornem como json
-app.use(express.json());
+//app.use(express.json());
 //----------------------
-
-app.get("/", (req, res) => {
-  res.status(200).send("Start node via express");
-});
-
-app.get("/livros/:id", (req, res) => {
-  const index = buscaLivro(req.params.id);
-
-  res.status(200).json(livros[index]);
-});
-
-app.post("/livros", (req, res) => {
-  livros.push(req.body);
-  res.status(201).send("Livro cadastrado com sucesso!");
-});
-
-app.put("/livros/:id", (req, res) => {
-  const index = buscaLivro(req.params.id);
-
-  livros[index].titulo = req.body.titulo;
-
-  res.status(200).json(livros);
-});
-
-app.delete("/livros/:id", (req, res) => {
-  const index = buscaLivro(req.params.id);
-  // deletar elemento [ index, quantidade]
-  livros.splice(index, 1);
-  res.status(200).send("Livro removido com sucesso!");
-});
 
 export default app;
 
